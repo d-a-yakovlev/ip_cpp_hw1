@@ -20,6 +20,7 @@ TEST_CASE("StringHolder", "[size]")
 	REQUIRE( sh1.empty() );
 
     StringHolder sh2 = StringHolder(sv);
+    REQUIRE(sh2.size() == 22); // тест добавляется из-за того, что был исправлен size. 
 	
     sh2 = StringHolder(std::string());
 	REQUIRE( sh2.empty() );
@@ -144,6 +145,7 @@ TEST_CASE("StringHolder", "[releaseString]")
         StringHolder holder(s);
         std::string gotten_s = holder.releaseString();
         REQUIRE(gotten_s == s);
+        REQUIRE(std::string() == holder.string()); // проверка на выполнение move-семантики
     }
     {
         StringHolder holder(sv);
