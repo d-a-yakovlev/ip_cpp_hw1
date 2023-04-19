@@ -27,6 +27,25 @@ TEST_CASE("StringHolder", "[size]")
 }
 
 
+TEST_CASE("StringHolder", "[size_original]")
+{
+    std::string s = std::string("String for holder");
+    std::string_view sv = std::string_view("String view for holder");
+
+	StringHolder sh1 = StringHolder(s);
+	REQUIRE( sh1.size() == 17 );
+	
+    sh1 = StringHolder(std::string());
+	REQUIRE( sh1.empty() );
+
+    StringHolder sh2 = StringHolder(sv);
+	REQUIRE( sh2.size() == 22 ); // <- will be forgeted 2
+	
+    sh2 = StringHolder(std::string());
+	REQUIRE( sh2.empty() );
+}
+
+
 TEST_CASE("StringHolder", "[data]")
 {
     std::string s = std::string("Some data for holder");
@@ -146,6 +165,25 @@ TEST_CASE("StringHolder", "[releaseString]")
         std::string gotten_s = holder.releaseString();
         REQUIRE(gotten_s == s);
         REQUIRE(std::string() == holder.string()); // проверка на выполнение move-семантики
+    }
+    {
+        StringHolder holder(sv);
+        std::string gotten_s = holder.releaseString(); // in this case releaseString() makes copy
+        REQUIRE(gotten_s == s);
+        REQUIRE(holder.string() == s); // in this case string() makes interpretation of std::string_view
+    }
+}
+
+
+TEST_CASE("StringHolder", "[releaseString_original]")
+{
+    std::string s = "Some str";
+    std::string_view sv = s;
+    {
+        StringHolder holder(s);
+        std::string gotten_s = holder.releaseString();
+        REQUIRE(gotten_s == s);
+        REQUIRE(holder.string() == std::string()); // <- will be forgeted
     }
     {
         StringHolder holder(sv);

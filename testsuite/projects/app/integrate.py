@@ -393,6 +393,21 @@ def test_size_StringView():
         check(user_input_size == content_size)
 
 
+def test_size_string_view_original(): # will be forgeted
+    res = system_run_command(['echo', "2 hellohello n", '|', path2bin])
+    out_lines = res.split("\n")
+    for _ in range(1):
+        user_input_line = out_lines[0 + 3*_]
+        content_line = out_lines[1 + 3*_]
+
+        re_res = re.search(r'{(.*)}', user_input_line)
+        user_input_size = re_res.groups()[0]
+
+        re_res = re.search(r'{(.*)}', content_line)
+        content_size = re_res.groups()[0]
+
+        check(user_input_size == content_size)
+
 
 tests = [
     test_content_string_short,
@@ -412,7 +427,8 @@ tests = [
     test_pipeline_sv_s_long,
     test_pipeline_sv_sv_long,
     test_size_string,
-    test_size_StringView
+    test_size_StringView,
+    test_size_string_view_original
 ]
 
 def run_tests():
