@@ -20,7 +20,7 @@ size_t StringHolder::size()
 {
     size_t size;
     if (type_ == StringHolder::String) size = s_.size();
-    if (type_ == StringHolder::StringView) size = s_.size();
+    if (type_ == StringHolder::StringView) size = sv_.size();
 
     return size;
 }
@@ -50,7 +50,7 @@ std::string StringHolder::releaseString()
 {
     if (type_ == StringHolder::String)
     {
-        std::string out = s_;
+        std::string out = std::move(s_);
         return out;
     }
 
